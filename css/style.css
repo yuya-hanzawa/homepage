@@ -51,15 +51,15 @@ p {
     justify-content: center;
     align-items: center;
 }
+#background {
+    margin-bottom: 80px;
+}
 #background .content {
     display: flex;
     justify-content: center;
     align-items: center;
     line-height: 2.0;
     font-size: 120%;
-}
-#background {
-    margin-bottom: 80px;
 }
 
 @media screen and (max-width: 600px) {

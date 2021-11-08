@@ -61,6 +61,19 @@ p {
     line-height: 2.0;
     font-size: 120%;
 }
+.flowbtn10 {	
+    font-size: 35px;
+    transition: .5s;
+    color:#444;	
+}
+.snsButtons {
+    margin: 5px;
+    padding: 0px;
+    text-align: center;
+}
+.snsButtons a {
+    margin: 16px;
+}
 
 @media screen and (max-width: 600px) {
     #main img {

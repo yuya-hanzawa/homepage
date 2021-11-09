@@ -3,10 +3,6 @@
 html {
     font-size: 100%;
 }
-body {
-    color: #333;
-    font-size: 0.875rem;
-}
 img {
     max-width: 100%;
 }
@@ -44,15 +40,6 @@ p {
 .snsButtons a {
     margin: 16px;
 }
-#main {
-    margin-bottom: 80px;
-}
-#main img {
-    width: 100%;
-    max-width: 1920px;
-    height: 600px;
-    object-fit: cover;
-}
 #header {
     margin-top: 15px;
 }
@@ -61,8 +48,14 @@ p {
     line-height: 1px;
     margin-bottom: 12px;
 }
-#header .site-title a {
-    display: block;
+#main {
+    margin-bottom: 80px;
+}
+#main img {
+    width: 100%;
+    max-width: 1920px;
+    height: 600px;
+    object-fit: cover;
 }
 #profile img {
     width: 100px;

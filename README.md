@@ -8,8 +8,6 @@ HTML&CSSで自分のホームページを作成する
 
 さくらのVPS：https://vps.sakura.ad.jp/ 
 
-</br>
-
 # サーバーやサーバーへのアクセスの設定
 
 使用環境  
@@ -24,15 +22,9 @@ CPU：仮想2Core
 メモリ：1GB  
 SSD：50GB  
 
-</br>
-
 ## 1. サーバーのセキュリティー設定
 
-</br>
-
 ### 1.1. 一般ユーザの作成
-
-</br>
 
 ユーザー追加
 ```
@@ -49,11 +41,7 @@ $ visudo
 $ usermod -aG wheel ユーザー名
 ```
 
-</br>
-
 ### 1.2. 公開認証鍵を使ったSSH接続
-
-</br>
 
 公開鍵の作成
 ```
@@ -67,11 +55,7 @@ $ ssh-keygen -t ed25519
 $ ssh-copy-id -i ~/.ssh/id_ed25519.pub ユーザー名@IPアドレス
 ```
 
-</br>
-
 ### 1.3. SSH設定ファイルの変更
-
-</br>
 
 ポート番号の変更　空白パスワードの禁止　rootログインの禁止　の設定
 ```
@@ -97,7 +81,5 @@ $ sudo systemctl restart sshd
 ```
 
 `Portを変更しているので必ずこのままログアウトせずにfirewallの設定を行う`
-
-</br>
 
 ### 1.4. firewallの設定

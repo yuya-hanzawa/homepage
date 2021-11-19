@@ -24,7 +24,7 @@ SSD：50GB
 
 ## 1. サーバーのセキュリティー設定
 
-### 1.1. 一般ユーザの作成
+### 1. 一般ユーザの作成
 
 ユーザー追加
 ```
@@ -41,7 +41,7 @@ $ visudo
 $ usermod -aG wheel ユーザー名
 ```
 
-### 1.2. 公開認証鍵を使ったSSH接続
+### 2. 公開認証鍵を使ったSSH接続
 
 公開鍵の作成
 ```
@@ -55,11 +55,16 @@ $ ssh-keygen -t ed25519
 $ ssh-copy-id -i ~/.ssh/id_ed25519.pub ユーザー名@IPアドレス
 ```
 
-### 1.3. SSH設定ファイルの変更
+### 3. SSH設定の変更
 
-ポート番号の変更　空白パスワードの禁止　rootログインの禁止　の設定
+SSH設定ファイルをコピー
 ```
 $ sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.org
+```
+
+コピーしたファイルの編集
+ポート番号の変更　空白パスワードの禁止　rootログインの禁止　の設定
+```
 $ sudo vim /etc/ssh/sshd_config
 
 # If you want to change the port on a SELinux system, you have to tell
@@ -82,4 +87,46 @@ $ sudo systemctl restart sshd
 
 `Portを変更しているので必ずこのままログアウトせずにfirewallの設定を行う`
 
-### 1.4. firewallの設定
+### 4. Firewallの設定
+
+Firewall設定ファイルをコピー
+```
+$ sudo cp /usr/lib/firewalld/services/ssh.xml /etc/firewalld/services/ssh-変更したIPアドレス.xml
+```
+
+コピーしたファイルの編集
+Portの変更
+```
+$ sudo vim /etc/firewalld/services/ssh-変更したIPアドレス.xml
+
+ <port protocol="tcp" port="設定したいPort"/>
+</service>
+```
+
+firewallの設定を反映させる
+```
+$ sudo firewalld-cmd --reload
+```
+
+恒久的に設定を反映
+```
+$ sudo firewalld-cmd --permanent --add-service=ssh-変更したPort
+```
+
+設定が反映されているか確認
+```
+$ firewall-cmd --list-all
+```
+
+### 5. SSH接続の簡略化
+
+```
+$ vi ~/.ssh/config
+
+Host 任意の接続名
+  hostname ホスト名
+  user ユーザー名
+  Port 設定したPort番号
+```
+
+

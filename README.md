@@ -28,44 +28,44 @@ SSD：50GB
 
 ユーザー追加
 ```
-$ adduser ユーザー名
-$ passwd ユーザー名
+server$ adduser ユーザー名
+server$ passwd ユーザー名
 ```
 作成したユーザーにroot権限を付与
 ```
-$ visudo
+server$ visudo
 
 ## Allows people in group wheel to run all commands
 %wheel  ALL=(ALL)       ALL  
 
-$ usermod -aG wheel ユーザー名
+server$ usermod -aG wheel ユーザー名
 ```
 
 ### 2. 公開認証鍵を使ったSSH接続
 
 公開鍵の作成
 ```
-$ mkdir ~/.ssh
-$ cd ~/.ssh
-$ ssh-keygen -t ed25519
+local$ mkdir ~/.ssh
+local$ cd ~/.ssh
+local$ ssh-keygen -t ed25519
 ```
 
 公開鍵を渡す
 ```
-$ ssh-copy-id -i ~/.ssh/id_ed25519.pub ユーザー名@IPアドレス
+local$ ssh-copy-id -i ~/.ssh/id_ed25519.pub ユーザー名@IPアドレス
 ```
 
 ### 3. SSH設定の変更
 
 SSH設定ファイルをコピー
 ```
-$ sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.org
+server$ sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.org
 ```
 
 コピーしたファイルの編集
 ポート番号の変更　空白パスワードの禁止　rootログインの禁止　の設定
 ```
-$ sudo vim /etc/ssh/sshd_config
+server$ sudo vim /etc/ssh/sshd_config
 
 # If you want to change the port on a SELinux system, you have to tell
 # SELinux about this change.
@@ -82,7 +82,7 @@ PermitRootLogin no
 
 再起動し、設定を反映
 ```
-$ sudo systemctl restart sshd
+server$ sudo systemctl restart sshd
 ```
 
 `Portを変更しているので必ずこのままログアウトせずにfirewallの設定を行う`
@@ -91,13 +91,13 @@ $ sudo systemctl restart sshd
 
 Firewall設定ファイルをコピー
 ```
-$ sudo cp /usr/lib/firewalld/services/ssh.xml /etc/firewalld/services/ssh-変更したIPアドレス.xml
+server$ sudo cp /usr/lib/firewalld/services/ssh.xml /etc/firewalld/services/ssh-変更したIPアドレス.xml
 ```
 
 コピーしたファイルの編集
 Portの変更
 ```
-$ sudo vim /etc/firewalld/services/ssh-変更したIPアドレス.xml
+server$ sudo vim /etc/firewalld/services/ssh-変更したIPアドレス.xml
 
  <port protocol="tcp" port="設定したいPort"/>
 </service>
@@ -105,23 +105,23 @@ $ sudo vim /etc/firewalld/services/ssh-変更したIPアドレス.xml
 
 firewallの設定を反映させる
 ```
-$ sudo firewalld-cmd --reload
+server$ sudo firewalld-cmd --reload
 ```
 
 恒久的に設定を反映
 ```
-$ sudo firewalld-cmd --permanent --add-service=ssh-変更したPort
+server$ sudo firewalld-cmd --permanent --add-service=ssh-変更したPort
 ```
 
 設定が反映されているか確認
 ```
-$ firewall-cmd --list-all
+server$ firewall-cmd --list-all
 ```
 
 ### 5. SSH接続の簡略化
 
 ```
-$ vi ~/.ssh/config
+local$ vi ~/.ssh/config
 
 Host 任意の接続名
   hostname ホスト名

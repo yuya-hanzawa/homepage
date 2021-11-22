@@ -36,7 +36,7 @@
   - name: git clone
     command:
       cmd: 'git clone /usr/share/nginx/git/profile.git'
-      chdir: /usr/share/nginx/html/profile
+      chdir: /usr/share/nginx/html
       removes: yes
 
   - name: conf

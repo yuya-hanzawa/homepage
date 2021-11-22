@@ -1,25 +1,71 @@
 - hosts: host
   user: root
   tasks:
+  
+  - name: install git
+    yum:
+      name: git
 
   - name: create group
     group:
       name: webpage
-      
+
+  - name: create user
+    user:
+      name: '{{ user_name }}'
+      password: "{{ user_pass | password_hash('sha512') }}"
+      append: yes
+      groups: wheel, webpage
+
+  - name: mkdir git repository
+    file:
+      path: '{{ item }}'
+      state: directory
+      group: webpage
+      owner: yuya.hanzawa
+      recurse: yes
+    with_items:
+      - /usr/share/nginx/git
+      - /usr/share/nginx/git/profile.git
+
+  - name: git --bare init --shared
+    command:
+      cmd: 'git --bare init --shared'
+      chdir: /usr/share/nginx/git/profile.git
+
+  - name: git clone
+    command:
+      cmd: 'git clone /usr/share/nginx/git/profile.git'
+      chdir: /usr/share/nginx/html/profile
+      removes: yes
+
+  - name: conf
+    lineinfile:
+      dest: /etc/nginx/conf.d/https.conf
+      state: present
+      backrefs: yes
+      regexp: '^#?\s*/usr/share/nginx/html'
+      line: '/usr/share/nginx/html/profile'
+
+  - name: create hooks file
+    copy:
+      dest: /usr/share/nginx/git/profile.git/hooks/post-receive
+      content: |
+          cd /usr/share/nginx/html/profile
+          git --git-dir=.git pull 
+    
   - name: configure directory owner and permission
     file:
-      path: /var/www/html/
+      path: /usr/share/nginx/git/profile.git/hooks/post-receive
+      mode: '755' 
+
+  - name: configure directory owner and permission
+    file:
+      path: /usr/share/nginx
       group: webpage
       owner: yuya.hanzawa
       mode: '775' 
       recurse: yes
-
-  - name: create user
-    user:
-      name: "{{ user_name }}"
-      password: "{{ user_pass | password_hash('sha512') }}"
-      append: yes
-      groups: wheel, webpage
 
   - name: modify sshd_config
     lineinfile:
@@ -63,11 +109,8 @@
   
   - name: firewalld enable http, https
     firewalld:
-      service: "{{ item }}"
+      service: 'https'
       permanent: yes
       state: enabled
       immediate: true
-    with_items:
-      - http
-      - https
   

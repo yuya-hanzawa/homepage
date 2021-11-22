@@ -37,7 +37,7 @@
     command:
       cmd: 'git clone /usr/share/nginx/git/profile.git'
       chdir: /usr/share/nginx/html
-      failed_when: no
+    failed_when: no
 
   - name: conf
     lineinfile:

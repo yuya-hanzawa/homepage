@@ -1,0 +1,72 @@
+- hosts: host
+  user: root
+  tasks:
+
+  - name: create group
+    group:
+      name: webpage
+  
+  - name: configure directory owner and permission
+    file:
+      path: /var/www/html/
+      group: webpage
+      owner: apache
+      mode: '775' 
+
+  - name: create user
+    user:
+      name: "{{ user_name }}"
+      password: "{{ user_pass | password_hash('sha512') }}"
+      append: yes
+      groups: wheel, webpage
+
+  - name: modify sshd_config
+    lineinfile:
+      dest: /etc/ssh/sshd_config
+      state: present
+      backrefs: yes
+      regexp: '{{ item.regexp }}'
+      line: '{{ item.line }}'
+    with_items:
+      - regexp: '^#?\s*Port'
+        line: 'Port {{ port }}'
+      - regexp: '^#?\s*PermitRootLogin'
+        line: 'PermitRootLogin no'
+      - regexp: '^#?\s*PermitEmptyPasswords'
+        line: 'PermitEmptyPasswords no'
+  
+  - name: restart sshd
+    service:
+      name: sshd
+      state: restarted
+
+  - name: started firewall
+    systemd:
+      name: firewalld
+      state: started
+      enabled: yes
+
+  - name: firewalld enable ssh port
+    firewalld:
+      port: '{{ port }}/tcp'
+      permanent: yes
+      state: enabled
+      immediate: true
+
+  - name: firewalld disabled ssh
+    firewalld:
+      service: ssh
+      permanent: yes
+      state: disabled
+      immediate: true
+  
+  - name: firewalld enable http, https
+    firewalld:
+      service: "{{ item }}"
+      permanent: yes
+      state: enabled
+      immediate: true
+    with_items:
+      - http
+      - https
+  

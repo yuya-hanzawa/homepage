@@ -5,13 +5,14 @@
   - name: create group
     group:
       name: webpage
-  
+      
   - name: configure directory owner and permission
     file:
       path: /var/www/html/
       group: webpage
-      owner: apache
+      owner: yuya.hanzawa
       mode: '775' 
+      recurse: yes
 
   - name: create user
     user:

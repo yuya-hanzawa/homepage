@@ -15,11 +15,11 @@ Local
 - macOS Big Sur 11.4 Apple M1
 
 Server  
-- OS：CentOS 7 x86_64(64bit)  
-- vCPU：2Core  
-- Memory：1GB  
-- SSD：50GB  
+- OS: CentOS 7 x86_64(64bit)  
+- vCPU: 2Core  
+- Memory: 1GB  
+- SSD: 50GB  
 
 Tools
-- Apache 2.4.6
-- git 1.8.3.1
+- nginx: 1.21.4
+- git: 1.8.3.1

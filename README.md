@@ -13,11 +13,11 @@ Sakura VPS：https://vps.sakura.ad.jp
 </br>
 
 # Tasks
-1. I' m going to add an SSL certificate.
+1. I' m going to add a SSL certificate.
 
 2. It's not possible to run the play-book after changing the port, so it needs to be fixed for idempotent.
 
-3. Making homepage more stylish
+3. Making homepage more stylish.
 
 </br>
 

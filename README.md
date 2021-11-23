@@ -32,9 +32,9 @@ Server
 - SSD: 50GB  
 
 Tools
+- ansible: 2.11.6
 - nginx: 1.21.4
 - git: 1.8.3.1
-- ansible: 2.11.6
 
 # References
 https://qiita.com/laineus/items/d61e004545ef0ef0b004

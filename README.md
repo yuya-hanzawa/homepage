@@ -1,12 +1,14 @@
 # homepage 
 
-Create my own website with HTML & CSS  
+Create my own homepage with HTML & CSS  
 
 HomePage： http://yuya-hanzawa.com/
 
 Use Sakura's VPS for the server and a domain name obtained from Sakura's domain.
 
 Sakura VPS：https://vps.sakura.ad.jp/ 
+
+I' m going to add an SSL certificate.
 
 </br>
 

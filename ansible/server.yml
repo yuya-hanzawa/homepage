@@ -1,7 +1,6 @@
 - hosts: host
   user: root
   tasks:
-  
   - name: install git
     yum:
       name: git
@@ -17,7 +16,7 @@
       append: yes
       groups: wheel, webpage
 
-  - name: mkdir git repository
+  - name: mkdir git-repository
     file:
       path: '{{ item }}'
       state: directory
@@ -39,27 +38,28 @@
       chdir: /usr/share/nginx/html
     failed_when: no
 
-  - name: conf
+  - name: modify nginx default.conf
     lineinfile:
-      dest: /etc/nginx/conf.d/https.conf
+      dest: /etc/nginx/conf.d/default.conf
       state: present
       backrefs: yes
-      regexp: '^#?\s*/usr/share/nginx/html'
-      line: '/usr/share/nginx/html/profile'
+      firstmatch: yes
+      regexp: '^?\s*root?\s*/usr/share/nginx/html'
+      line: 'root   /usr/share/nginx/html/profile;'
 
-  - name: create hooks file
+  - name: create git-hooks file
     copy:
       dest: /usr/share/nginx/git/profile.git/hooks/post-receive
       content: |
           cd /usr/share/nginx/html/profile
           git --git-dir=.git pull 
     
-  - name: configure directory owner and permission
+  - name: configure git-hooks directory owner and permission
     file:
       path: /usr/share/nginx/git/profile.git/hooks/post-receive
       mode: '755' 
 
-  - name: configure directory owner and permission
+  - name: configure nginx directory owner and permission
     file:
       path: /usr/share/nginx
       group: webpage
@@ -109,8 +109,10 @@
   
   - name: firewalld enable http, https
     firewalld:
-      service: 'https'
+      service: "{{ item }}"
       permanent: yes
       state: enabled
       immediate: true
-  
+    with_items:
+      - http
+      - https

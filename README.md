@@ -4,11 +4,11 @@ Create my own homepage with HTML & CSS
 
 In addition, I created a system that automatically updates homepage every time I execute git push with git hooks.
 
-HomePage： http://yuya-hanzawa.com/
+HomePage： http://yuya-hanzawa.com
 
 Use Sakura's VPS for the server and a domain name obtained from Sakura's domain.
 
-Sakura VPS：https://vps.sakura.ad.jp/ 
+Sakura VPS：https://vps.sakura.ad.jp
 
 </br>
 

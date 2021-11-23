@@ -1,6 +1,8 @@
 # homepage 
 
-Create my own homepage with HTML & CSS  
+Create my own homepage with HTML & CSS
+
+In addition, I created a system that automatically updates homepage every time I execute git push with git hooks.
 
 HomePage： http://yuya-hanzawa.com/
 

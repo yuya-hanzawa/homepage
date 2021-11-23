@@ -8,7 +8,14 @@ Use Sakura's VPS for the server and a domain name obtained from Sakura's domain.
 
 Sakura VPS：https://vps.sakura.ad.jp/ 
 
-I' m going to add an SSL certificate.
+</br>
+
+# Tasks
+1. I' m going to add an SSL certificate.
+
+2. It's not possible to run the play-book after changing the port, so it needs to be fixed for idempotent.
+
+3. Making homepage more stylish
 
 </br>
 
@@ -25,3 +32,4 @@ Server
 Tools
 - nginx: 1.21.4
 - git: 1.8.3.1
+- ansible: 2.11.6

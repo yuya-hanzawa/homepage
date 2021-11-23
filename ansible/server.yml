@@ -11,8 +11,8 @@
 
   - name: create user
     user:
-      name: '{{ user_name }}'
-      password: "{{ user_pass | password_hash('sha512') }}"
+      name: '{{ user }}'
+      password: "{{ password | password_hash('sha512') }}"
       append: yes
       groups: wheel, webpage
 
@@ -21,7 +21,7 @@
       path: '{{ item }}'
       state: directory
       group: webpage
-      owner: yuya.hanzawa
+      owner: '{{ user }}'
       recurse: yes
     with_items:
       - /usr/share/nginx/git
@@ -63,7 +63,7 @@
     file:
       path: /usr/share/nginx
       group: webpage
-      owner: yuya.hanzawa
+      owner: '{{ user }}'
       mode: '775' 
       recurse: yes
 

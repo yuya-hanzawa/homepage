@@ -44,8 +44,8 @@
       state: present
       backrefs: yes
       firstmatch: yes
-      regexp: '^?\s*root?\s*/usr/share/nginx/html'
-      line: 'root   /usr/share/nginx/html/profile;'
+      regexp: '^.*root.*/usr/share/nginx/html.*'
+      line: '        root   /usr/share/nginx/html/profile;'
 
   - name: create git-hooks file
     copy:
@@ -71,15 +71,14 @@
     lineinfile:
       dest: /etc/ssh/sshd_config
       state: present
-      backrefs: yes
       regexp: '{{ item.regexp }}'
       line: '{{ item.line }}'
     with_items:
-      - regexp: '^#?\s*Port'
+      - regexp: '^#Port.*'
         line: 'Port {{ port }}'
-      - regexp: '^#?\s*PermitRootLogin'
+      - regexp: '^#PermitRootLogin.*'
         line: 'PermitRootLogin no'
-      - regexp: '^#?\s*PermitEmptyPasswords'
+      - regexp: '^#PermitEmptyPasswords.*'
         line: 'PermitEmptyPasswords no'
   
   - name: restart sshd

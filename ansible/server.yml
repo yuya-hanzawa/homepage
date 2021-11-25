@@ -77,7 +77,7 @@
     blockinfile:
       dest: /etc/nginx/nginx.conf
       insertafter: '.*application/octet-stream;'
-      block: |4
+      block: |2
           log_format json escape=json '{"time": "$time_iso8601",'
                                        '"host": "$remote_addr",'
                                        '"vhost": "$host",'

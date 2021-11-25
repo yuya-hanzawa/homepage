@@ -69,15 +69,15 @@
       state: absent
       regexp: "{{ item }}"
     with_items:
-      - '^.*$remote_addr.*'
-      - '^.*$status.*'
-      - '^.*$http_user_agent.*'
+      - '^.*remote_addr.*'
+      - '^.*status.*'
+      - '^.*http_user_agent.*'
 
   - name: modify and add nginx nginx.conf 
     blockinfile:
       dest: /etc/nginx/nginx.conf
       insertafter: '.*application/octet-stream;'
-      block: |2
+      block: |4
           log_format json escape=json '{"time": "$time_iso8601",'
                                        '"host": "$remote_addr",'
                                        '"vhost": "$host",'
@@ -99,7 +99,7 @@
     lineinfile:
       dest: /etc/nginx/nginx.conf
       regexp: '.*/var/log/nginx/access.log.*'
-      line: '    access_log /path/to/access_log json;'
+      line: '    access_log /var/log/nginx/access_log json;'
 
   - name: create git-hooks file
     copy:

@@ -21,14 +21,6 @@
       user: "{{ user }}"
       key: "{{ lookup('file', '~/.ssh/id_ed25519.pub') }}"
 
-  - name: configure nginx directory owner and permission
-    file:
-      path: /usr/share/nginx
-      group: webpage
-      owner: '{{ user }}'
-      mode: '775' 
-      recurse: yes
-
   - name: mkdir git-repository
     file:
       path: '{{ item }}'
@@ -112,6 +104,14 @@
     file:
       path: /usr/share/nginx/git/profile.git/hooks/post-receive
       mode: '755' 
+
+  - name: configure nginx directory owner and permission
+    file:
+      path: /usr/share/nginx
+      group: webpage
+      owner: '{{ user }}'
+      mode: '775' 
+      recurse: yes
 
   - name: modify sshd_config
     lineinfile:

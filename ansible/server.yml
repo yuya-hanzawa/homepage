@@ -16,6 +16,11 @@
       append: yes
       groups: wheel, webpage
 
+  - name: add authorized_key
+    authorized_key:
+      user: "{{ user }}"
+      key: "{{ lookup('file', '~/.ssh/id_ed25519.pub') }}"
+
   - name: mkdir git-repository
     file:
       path: '{{ item }}'
@@ -84,8 +89,8 @@
         line: 'PermitRootLogin no'
       - regexp: '^#PermitEmptyPasswords.*'
         line: 'PermitEmptyPasswords no'
-#     - regexp: '^PasswordAuthentication.*'
-#       line: 'PasswordAuthentication no'
+      - regexp: '^PasswordAuthentication.*'
+        line: 'PasswordAuthentication no'
   
   - name: restart sshd
     service:

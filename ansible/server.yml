@@ -114,6 +114,13 @@
       mode: '775' 
       recurse: yes
 
+  - name: configure access.log owner and permission
+    file:
+      path: /var/log/nginx/access.log
+      group: webpage
+      owner: '{{ user }}'
+      mode: '775' 
+
   - name: modify sshd_config
     lineinfile:
       dest: /etc/ssh/sshd_config

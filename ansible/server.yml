@@ -92,7 +92,7 @@
     lineinfile:
       dest: /etc/nginx/nginx.conf
       regexp: '.*/var/log/nginx/access.log.*'
-      line: '    access_log /var/log/nginx/access_log json;'
+      line: '    access_log /var/log/nginx/access.log json;'
 
   - name: create git-hooks file
     copy:

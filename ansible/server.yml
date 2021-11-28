@@ -134,8 +134,6 @@
         line: 'PermitRootLogin no'
       - regexp: '^#PermitEmptyPasswords.*'
         line: 'PermitEmptyPasswords no'
-      - regexp: '^PasswordAuthentication.*'
-        line: 'PasswordAuthentication no'
   
   - name: restart sshd
     service:

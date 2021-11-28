@@ -12,10 +12,10 @@ Sakura VPS：https://vps.sakura.ad.jp
 
 </br>
 
-# Tasks
+# Improvements
 1. I' m going to add a SSL certificate.
 
-2. It's not possible to run the play-book after changing the port, so it needs to be fixed for idempotent.
+2. It's not possible to run ansible-play-book after changing the port, so it needs to be fixed for idempotent.
 
 3. Making homepage more stylish.
 

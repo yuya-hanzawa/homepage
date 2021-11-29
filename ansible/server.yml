@@ -108,18 +108,14 @@
 
   - name: configure nginx directory owner and permission
     file:
-      path: /usr/share/nginx
+      path: '{{ item }}'
       group: webpage
       owner: '{{ user }}'
       mode: '775' 
       recurse: yes
-
-  - name: configure access.log owner and permission
-    file:
-      path: /var/log/nginx/access.log
-      group: webpage
-      owner: '{{ user }}'
-      mode: '775' 
+    with_items:
+      - /usr/share/nginx
+      - /var/log/nginx
 
   - name: modify sshd_config
     lineinfile:

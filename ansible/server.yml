@@ -108,19 +108,26 @@
 
   - name: configure nginx directory owner and permission
     file:
-      path: '{{ item }}'
+      path: /usr/share/nginx
       group: webpage
       owner: '{{ user }}'
       mode: '775' 
       recurse: yes
+
+  - name: modify logrotate.d/nginx
+    lineinfile:
+      dest: /etc/logrotate.d/nginx
+      regexp: "{{ item.regexp }}"
+      line: "{{ item.line }}"
     with_items:
-      - /usr/share/nginx
-      - /var/log/nginx
+      - regexp: '.*create.*'
+        line: '        create 775 {{ user }} webpage'
+      - regexp: '.*rotate.*'
+        line: '        rotate 7'
 
   - name: modify sshd_config
     lineinfile:
       dest: /etc/ssh/sshd_config
-      state: present
       regexp: '{{ item.regexp }}'
       line: '{{ item.line }}'
     with_items:
@@ -165,3 +172,8 @@
     with_items:
       - http
       - https
+
+  - name: restart nginx
+    service:
+      name: nginx
+      state: restarted

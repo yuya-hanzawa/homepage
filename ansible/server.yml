@@ -125,6 +125,10 @@
       - regexp: '.*rotate.*'
         line: '        rotate 7'
 
+  - name: restart logrotate
+    command:
+      cmd: 'logrotate -f /etc/logrotate.conf'
+
   - name: modify sshd_config
     lineinfile:
       dest: /etc/ssh/sshd_config

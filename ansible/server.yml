@@ -123,7 +123,13 @@
       - regexp: '.*create.*'
         line: '        create 775 {{ user }} webpage'
       - regexp: '.*rotate.*'
-        line: '        rotate 7'
+        line: '        rotate 3'
+
+  - name: modify logrotate.d/nginx
+    lineinfile:
+      dest: /etc/logrotate.d/nginx
+      state: absent
+      regexp: '.*compress.*'
 
   - name: restart logrotate
     command:

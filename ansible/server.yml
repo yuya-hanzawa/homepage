@@ -123,7 +123,7 @@
       - regexp: '.*create.*'
         line: '        create 775 {{ user }} webpage'
       - regexp: '.*rotate.*'
-        line: '        rotate 3'
+        line: '        rotate 7'
 
   - name: modify logrotate.d/nginx
     lineinfile:

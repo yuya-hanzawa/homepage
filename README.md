@@ -1,5 +1,7 @@
 # homepage 
 
+## Description
+
 I create my own homepage using HTML & CSS.
 
 In addition, I created a system that automatically updates homepage every time I execute git push with git hooks.
@@ -12,7 +14,7 @@ Sakura VPS：https://vps.sakura.ad.jp
 
 </br>
 
-# Improvements
+## Improvements
 1. I' m going to add a SSL certificate.
 
 2. It's not possible to run ansible-play-book after changing the port, so it needs to be fixed for idempotent.
@@ -21,7 +23,7 @@ Sakura VPS：https://vps.sakura.ad.jp
 
 </br>
 
-# Requirements
+## Requirements
 Local
 - macOS Big Sur 11.4 Apple M1
 

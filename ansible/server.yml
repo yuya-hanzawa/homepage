@@ -111,7 +111,7 @@
       path: /usr/share/nginx
       group: webpage
       owner: '{{ user }}'
-      mode: '775' 
+      mode: '770' 
       recurse: yes
 
   - name: modify logrotate.d/nginx

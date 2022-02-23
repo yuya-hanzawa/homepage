@@ -18,5 +18,5 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /usr/share/nginx/html
+            cd /usr/share/nginx/html/homepage
             git pull origin main

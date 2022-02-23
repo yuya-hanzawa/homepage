@@ -37,4 +37,5 @@ Sakura VPS：https://vps.sakura.ad.jp
   - git 1.8.3.1
 
 # References
-https://qiita.com/laineus/items/d61e004545ef0ef0b004
+https://hsmtweb.com/tool-service/github-actions.html
+https://qiita.com/suthio/items/2760e4cff0e185fe2db9

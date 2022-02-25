@@ -10,22 +10,6 @@
   #  group:
   #    name: webpage
 
-  - name: create user
-    user:
-      name: '{{ user }}'
-      password: "{{ password | password_hash('sha512') }}"
-      #append: yes
-      # groupは主グループ1ユーザーに1つ指定可能
-      group: wheel
-      # groupsはサブグループユーザーを複数のグループに設定する
-      #groups: webpage
-
-  # ローカルの公開鍵をホストに登録
-  - name: add authorized_key
-    authorized_key:
-      user: "{{ user }}"
-      key: "{{ lookup('file', '~/.ssh/id_ed25519.pub') }}"
-
   - name: make directory
     file:
       path: '/usr/share/nginx/html'
@@ -35,10 +19,10 @@
       recurse: yes
 
   - name: git clone
-    command:
-      cmd: 'git clone git@github.com:zawa1120/homepage.git'
-      chdir: /usr/share/nginx/html
-    failed_when: no
+    ansible.builtin.git:
+      repo: git@github.com:zawa1120/homepage.git
+      dest: /usr/share/nginx/html/homepage
+      accept_hostkey: true
 
   - name: configure the owner and permission in target file
     file:
@@ -118,6 +102,19 @@
   - name: restart logrotate
     command:
       cmd: 'logrotate -f /etc/logrotate.conf'
+
+  - name: modify sshd_config
+    lineinfile:
+      dest: /etc/ssh/sshd_config
+      regexp: '{{ item.regexp }}'
+      line: '{{ item.line }}'
+    with_items:
+      - regexp: '^#Port.*'
+        line: 'Port {{ port }}'
+      - regexp: '^#PermitRootLogin.*'
+        line: 'PermitRootLogin no'
+      - regexp: '^#PermitEmptyPasswords.*'
+        line: 'PermitEmptyPasswords no'
 
   - name: restart sshd
     service:

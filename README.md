@@ -39,3 +39,4 @@ Sakura VPS：https://vps.sakura.ad.jp
 # References
 https://hsmtweb.com/tool-service/github-actions.html
 https://qiita.com/suthio/items/2760e4cff0e185fe2db9
+https://qiita.com/yysskk/items/974c9c55d66a26515651

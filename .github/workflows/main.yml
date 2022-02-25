@@ -18,6 +18,6 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            ssh-keyscan github.com >> ~/.ssh/known_hosts
+            ssh-keyscan -H github.com >> ~/.ssh/known_hosts
             cd /usr/share/nginx/html/homepage
             git pull origin main

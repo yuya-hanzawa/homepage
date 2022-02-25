@@ -17,6 +17,7 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           port: ${{ secrets.SSH_PORT }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          known_hosts: ~/.ssh/known_hosts
           script: |
             cd /usr/share/nginx/html/homepage
             git pull origin main

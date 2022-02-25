@@ -6,45 +6,49 @@
       name: '*'
       state: latest
 
-  - name: create group
-    group:
-      name: webpage
+  #- name: create group
+  #  group:
+  #    name: webpage
 
   - name: create user
     user:
       name: '{{ user }}'
       password: "{{ password | password_hash('sha512') }}"
-      append: yes
-      groups: wheel, webpage
+      #append: yes
+      # groupは主グループ1ユーザーに1つ指定可能
+      group: wheel
+      # groupsはサブグループユーザーを複数のグループに設定する
+      #groups: webpage
 
+  # ローカルの公開鍵をホストに登録
   - name: add authorized_key
     authorized_key:
       user: "{{ user }}"
       key: "{{ lookup('file', '~/.ssh/id_ed25519.pub') }}"
 
-  - name: mkdir git-repository
+  - name: make directory
     file:
-      path: '{{ item }}'
+      path: '/usr/share/nginx/html'
       state: directory
-      group: webpage
+      group: wheel
       owner: '{{ user }}'
       recurse: yes
-    with_items:
-      - /usr/share/nginx/git
-      - /usr/share/nginx/git/profile.git
-
-  - name: git --bare init --shared
-    command:
-      cmd: 'git --bare init --shared'
-      chdir: /usr/share/nginx/git/profile.git
 
   - name: git clone
     command:
-      cmd: 'git clone /usr/share/nginx/git/profile.git'
+      cmd: 'git clone git@github.com:zawa1120/homepage.git'
       chdir: /usr/share/nginx/html
     failed_when: no
 
-  - name: modify nginx default.conf
+  - name: configure the owner and permission in target file
+    file:
+      path: /usr/share/nginx/html
+      group: wheel
+      owner: '{{ user }}'
+      mode: '775' 
+      recurse: yes
+
+  - name: configure the location parts in default.conf
     lineinfile:
       dest: /etc/nginx/conf.d/default.conf
       firstmatch: yes
@@ -52,11 +56,11 @@
       line: "{{ item.line }}"
     with_items:
       - regexp: '^.*root.*/usr/share/nginx/html.*'
-        line: '        root   /usr/share/nginx/html/profile;'
+        line: '        root   /usr/share/nginx/html/homepage;'
       - regexp: '^.*server_name.*localhost.*'
         line: '    server_name  yuya-hanzawa.com;'
 
-  - name: modify and delete nginx nginx.conf 
+  - name: delete lines in nginx.conf
     lineinfile:
       dest: /etc/nginx/nginx.conf
       state: absent
@@ -66,7 +70,7 @@
       - '^.*status.*'
       - '^.*http_user_agent.*'
 
-  - name: modify and add nginx nginx.conf 
+  - name: modify log format in nginx.conf 
     blockinfile:
       dest: /etc/nginx/nginx.conf
       insertafter: '.*application/octet-stream;'
@@ -88,31 +92,11 @@
                                          '"forwardedproto": "$http_x_forwarded_proto",'
                                          '"referrer": "$http_referer"}';
 
-  - name: modify nginx nginx.conf
+  - name: modify log format in nginx.conf
     lineinfile:
       dest: /etc/nginx/nginx.conf
       regexp: '.*/var/log/nginx/access.log.*'
       line: '    access_log /var/log/nginx/access.log json;'
-
-  - name: create git-hooks file
-    copy:
-      dest: /usr/share/nginx/git/profile.git/hooks/post-receive
-      content: |
-          cd /usr/share/nginx/html/profile
-          git --git-dir=.git pull 
-    
-  - name: configure git-hooks directory owner and permission
-    file:
-      path: /usr/share/nginx/git/profile.git/hooks/post-receive
-      mode: '755' 
-
-  - name: configure nginx directory owner and permission
-    file:
-      path: /usr/share/nginx
-      group: webpage
-      owner: '{{ user }}'
-      mode: '770' 
-      recurse: yes
 
   - name: modify logrotate.d/nginx
     lineinfile:
@@ -121,7 +105,7 @@
       line: "{{ item.line }}"
     with_items:
       - regexp: '.*create.*'
-        line: '        create 775 {{ user }} webpage'
+        line: '        create 775 {{ user }} wheel'
       - regexp: '.*rotate.*'
         line: '        rotate 7'
 
@@ -135,19 +119,6 @@
     command:
       cmd: 'logrotate -f /etc/logrotate.conf'
 
-  - name: modify sshd_config
-    lineinfile:
-      dest: /etc/ssh/sshd_config
-      regexp: '{{ item.regexp }}'
-      line: '{{ item.line }}'
-    with_items:
-      - regexp: '^#Port.*'
-        line: 'Port {{ port }}'
-      - regexp: '^#PermitRootLogin.*'
-        line: 'PermitRootLogin no'
-      - regexp: '^#PermitEmptyPasswords.*'
-        line: 'PermitEmptyPasswords no'
-  
   - name: restart sshd
     service:
       name: sshd

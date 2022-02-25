@@ -1,1 +1,1 @@
-ansible-playbook -i hosts server.yml
+ansible-playbook -i hosts set-up.yml

@@ -6,10 +6,6 @@
       name: '*'
       state: latest
 
-  #- name: create group
-  #  group:
-  #    name: webpage
-
   - name: make directory
     file:
       path: '/usr/share/nginx/html'
@@ -43,6 +39,13 @@
         line: '        root   /usr/share/nginx/html/homepage;'
       - regexp: '^.*server_name.*localhost.*'
         line: '    server_name  yuya-hanzawa.com;'
+
+  - name: configure the location parts in https.conf 
+    lineinfile:
+      dest: /etc/nginx/conf.d/https.conf 
+      firstmatch: yes
+      regexp: '^.*root.*/usr/share/nginx/html.*'
+      line: '        root   /usr/share/nginx/html/homepage;'
 
   - name: delete lines in nginx.conf
     lineinfile:

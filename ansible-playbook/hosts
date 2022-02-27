@@ -1,7 +1,15 @@
 [host]
-160.16.141.113:22
+160.16.141.113
+
+[changed_host]
+160.16.141.113
 
 [host:vars]
 user=yuya.hanzawa
 password=yuuya1120
 port=65432
+
+[changed_host:vars]
+ansible_ssh_user=yuya.hanzawa
+ansible_sudo_pass=yuuya1120
+ansible_port=65432

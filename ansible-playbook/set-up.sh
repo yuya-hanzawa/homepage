@@ -1,1 +1,1 @@
-ansible-playbook -i hosts set-up.yaml
+ansible-playbook -i hosts tasks/set-up.yaml

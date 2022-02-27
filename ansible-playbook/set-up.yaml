@@ -1,4 +1,5 @@
-- hosts: host
+- name: set up target server 
+  hosts: host
   user: root
   tasks:
   - name: yum update

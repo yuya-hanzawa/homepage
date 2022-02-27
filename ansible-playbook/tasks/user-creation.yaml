@@ -1,0 +1,33 @@
+- name: set up user and authorized_key
+  hosts: all
+  user: root
+  tasks:
+  - name: create user
+    user:
+      name: '{{ user }}'
+      password: "{{ password | password_hash('sha512') }}"
+      #append: yes
+      # groupは主グループ1ユーザーに1つ指定可能
+      group: wheel
+      # groupsはサブグループユーザーを複数のグループに設定する
+      #groups: webpage
+
+  - name: create authorized_key for root user on host
+    openssh_keypair:
+      path: ~/.ssh/id_ed25519
+      type: ed25519
+
+  # ローカルの公開鍵をホストに登録
+  - name: add authorized_key
+    authorized_key:
+      user: "{{ user }}"
+      key: "{{ lookup('file', '~/.ssh/id_ed25519.pub') }}"
+
+- hosts: all
+  user: '{{ user }}'
+  tasks:
+  - name: create authorized_key for created user on host
+    openssh_keypair:
+      path: ~/.ssh/id_ed25519
+      type: ed25519
+    

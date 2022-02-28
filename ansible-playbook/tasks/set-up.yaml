@@ -64,7 +64,7 @@
       insertafter: '.*application/octet-stream;'
       block: |2
             log_format json escape=json '{"time": "$time_iso8601",'
-                                         '"host": "$remote_addr",'
+                                         '"remote_host": "$remote_addr",'
                                          '"vhost": "$host",'
                                          '"user": "$remote_user",'
                                          '"status": "$status",'
@@ -73,9 +73,9 @@
                                          '"path": "$request_uri",'
                                          '"req": "$request",'
                                          '"size": "$body_bytes_sent",'
-                                         '"reqtime": "$request_time",'
-                                         '"apptime": "$upstream_response_time",'
-                                         '"ua": "$http_user_agent",'
+                                         '"request_time": "$request_time",'
+                                         '"upstream_time": "$upstream_response_time",'
+                                         '"user_agent": "$http_user_agent",'
                                          '"forwardedfor": "$http_x_forwarded_for",'
                                          '"forwardedproto": "$http_x_forwarded_proto",'
                                          '"referrer": "$http_referer"}';

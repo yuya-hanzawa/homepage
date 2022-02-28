@@ -1,0 +1,16 @@
+[host]
+×××.×××.×××.×××
+
+[changed_host]
+×××.×××.×××.×××:××
+
+[host:vars]
+ansible_ssh_user=××××××
+
+user=××××××
+password=××××××
+port=××××××
+
+[changed_host:vars]
+ansible_ssh_user=××××××
+ansible_sudo_pass=××××××

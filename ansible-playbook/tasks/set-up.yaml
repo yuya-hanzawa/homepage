@@ -1,6 +1,8 @@
 - name: set up target server 
   hosts: host
-  user: root
+  user: '{{ user }}'
+  become: true
+  become_user: root
   tasks:
   - name: yum update
     yum:

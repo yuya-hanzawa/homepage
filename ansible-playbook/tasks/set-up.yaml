@@ -67,7 +67,7 @@
       block: |2
             log_format json escape=json '{"time": "$time_iso8601",'
                                          '"remote_host": "$remote_addr",'
-                                         '"vhost": "$host",'
+                                         '"host": "$host",'
                                          '"user": "$remote_user",'
                                          '"status": "$status",'
                                          '"protocol": "$server_protocol",'

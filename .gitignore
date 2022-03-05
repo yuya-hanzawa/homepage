@@ -1,2 +1,5 @@
 .DS_Store
 ansible-playbook/hosts
+ansible-playbook/user-creation.sh
+ansible-playbook/update.sh
+ansible-playbook/set-up.sh

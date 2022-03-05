@@ -96,7 +96,7 @@
     with_items:
       - regexp: '.*create.*'
         line: '        create 775 {{ user }} wheel'
-      - regexp: '.*rotate.*'
+      - regexp: '.*52.*'
         line: '        rotate 7'
 
   - name: modify logrotate.d/nginx
@@ -107,7 +107,7 @@
 
   - name: restart logrotate
     command:
-      cmd: 'logrotate -f /etc/logrotate.conf'
+      cmd: 'logrotate -f /etc/logrotate.d/nginx'
 
   - name: modify sshd_config
     lineinfile:

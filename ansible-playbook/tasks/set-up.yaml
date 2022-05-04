@@ -4,12 +4,12 @@
   become: true
   become_user: root
   tasks:
-  - name: yum update
+  - name: Update Packages
     yum:
       name: '*'
       state: latest
 
-  - name: make directory
+  - name: Create Repository For Web Pages
     file:
       path: '/usr/share/nginx/html'
       state: directory
@@ -17,13 +17,13 @@
       owner: '{{ user }}'
       recurse: yes
 
-  - name: git clone
+  - name: Clone Source Code
     ansible.builtin.git:
       repo: git@github.com:zawa1120/homepage.git
       dest: /usr/share/nginx/html/homepage
       accept_hostkey: true
 
-  - name: configure the owner and permission in target file
+  - name: Change Permission And Owner of Cloned File
     file:
       path: /usr/share/nginx/html
       group: wheel
@@ -31,7 +31,7 @@
       mode: '775' 
       recurse: yes
 
-  - name: configure the location parts in default.conf
+  - name: Reflect Cloned File
     lineinfile:
       dest: /etc/nginx/conf.d/default.conf
       firstmatch: yes
@@ -43,14 +43,14 @@
       - regexp: '^.*server_name.*localhost.*'
         line: '    server_name  yuya-hanzawa.com;'
 
-  - name: configure the location parts in https.conf 
+  - name: Change https Configuration File
     lineinfile:
       dest: /etc/nginx/conf.d/https.conf 
       firstmatch: yes
       regexp: '^.*root.*/usr/share/nginx/html.*'
       line: '        root   /usr/share/nginx/html/homepage;'
 
-  - name: delete lines in nginx.conf
+  - name: Delete Unneeded Log Columns
     lineinfile:
       dest: /etc/nginx/nginx.conf
       state: absent
@@ -60,7 +60,7 @@
       - '^.*status.*'
       - '^.*http_user_agent.*'
 
-  - name: modify log format in nginx.conf 
+  - name: Select Log Columns
     blockinfile:
       dest: /etc/nginx/nginx.conf
       insertafter: '.*application/octet-stream;'
@@ -73,7 +73,6 @@
                                          '"protocol": "$server_protocol",'
                                          '"method": "$request_method",'
                                          '"path": "$request_uri",'
-                                         '"req": "$request",'
                                          '"size": "$body_bytes_sent",'
                                          '"request_time": "$request_time",'
                                          '"upstream_time": "$upstream_response_time",'
@@ -82,13 +81,13 @@
                                          '"forwardedproto": "$http_x_forwarded_proto",'
                                          '"referrer": "$http_referer"}';
 
-  - name: modify log format in nginx.conf
+  - name: Change Log File Format
     lineinfile:
       dest: /etc/nginx/nginx.conf
       regexp: '.*/var/log/nginx/access.log.*'
       line: '    access_log /var/log/nginx/access.log json;'
 
-  - name: modify logrotate.d/nginx
+  - name: Change Log File Permission And Save Period
     lineinfile:
       dest: /etc/logrotate.d/nginx
       regexp: "{{ item.regexp }}"
@@ -99,17 +98,17 @@
       - regexp: '.*52.*'
         line: '        rotate 7'
 
-  - name: modify logrotate.d/nginx
+  - name: Compression Free
     lineinfile:
       dest: /etc/logrotate.d/nginx
       state: absent
       regexp: '.*compress.*'
 
-  - name: restart logrotate
+  - name: Reflect logrotate Settings
     command:
       cmd: 'logrotate -f /etc/logrotate.d/nginx'
 
-  - name: modify sshd_config
+  - name: Change ssh Settings
     lineinfile:
       dest: /etc/ssh/sshd_config
       regexp: '{{ item.regexp }}'
@@ -122,32 +121,32 @@
       - regexp: '^#PermitEmptyPasswords.*'
         line: 'PermitEmptyPasswords no'
 
-  - name: restart sshd
+  - name: Reflect ssh Settings
     service:
       name: sshd
       state: restarted
 
-  - name: started firewall
+  - name: Enable firewall
     systemd:
       name: firewalld
       state: started
       enabled: yes
 
-  - name: firewalld enable ssh port
+  - name: Enable firewalld of ssh port
     firewalld:
       port: '{{ port }}/tcp'
       permanent: yes
       state: enabled
       immediate: true
 
-  - name: firewalld disabled ssh
+  - name: Disabled firewalld of Default ssh port
     firewalld:
       service: ssh
       permanent: yes
       state: disabled
       immediate: true
   
-  - name: firewalld enable http, https
+  - name: Enable firewalld http And https
     firewalld:
       service: "{{ item }}"
       permanent: yes
@@ -157,7 +156,7 @@
       - http
       - https
 
-  - name: restart nginx
+  - name: Reflect nginx Settings
     service:
       name: nginx
       state: restarted
